@@ -50,3 +50,4 @@ app.listen(PORT, () => {
   console.log(`Server kjører på http://localhost:${PORT}`);
   console.log(`Åpne http://localhost:${PORT} i nettleser`);
 });
+
