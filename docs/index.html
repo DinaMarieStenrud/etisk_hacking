@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <title>Velkommen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>Index</h1>
+  <p>Denne siden viser en alert og logger nøyaktig samme tekst til serveren.</p>
+
+  <script>
+    // Behold original alert, men "fanger" alle kall for å sende til server
+    (function () {
+      const originalAlert = window.alert;
+      window.alert = function (msg) {
+        // Prøv å logge først (asynkront), deretter vis alerten
+        try {
+          // Støtt både text/plain (enkelt) ...
+          fetch('/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: String(msg)
+          }).catch(err => console.error('POST /log feilet:', err));
+        } catch (e) {
+          console.error('Klarte ikke å sende alert-tekst:', e);
+        }
+        // ... og uansett: vis den faktiske alerten brukeren ser
+        originalAlert(msg);
+      };
+    })();
+
+    // Ingen const — akkurat som du ba om:
+    alert(document.cookie);
+  </script>
+</body>
+</html>
